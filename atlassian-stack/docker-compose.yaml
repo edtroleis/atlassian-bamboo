@@ -1,0 +1,92 @@
+version: "3.3"
+services:
+  # jira-software:
+  #   volumes:
+  #     - "jiraVolume:/var/atlassian/application-data/jira"
+  #   container_name: jira
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - JVM_MINIMUM_MEMORY=1024m
+  #     - JVM_MAXIMUM_MEMORY=2048m
+  #   image: "atlassian/jira-software:8.1.0"
+  # bitbucket-server:
+  #   volumes:
+  #     - "bitbucketVolume:/var/atlassian/application-data/bitbucket"
+  #   container_name: bitbucket
+  #   ports:
+  #     - "7990:7990"
+  #     - "7999:7999"
+  #   environment:
+  #     - JVM_MINIMUM_MEMORY=1024m
+  #     - JVM_MAXIMUM_MEMORY=2048m
+  #   image: "atlassian/bitbucket-server:6.3.0"
+  bamboo-server:
+    volumes:
+      - "bambooVolume:/var/atlassian/application-data/bamboo"
+    container_name: bamboo
+    ports:
+      - "54663:54663"
+      - "8085:8085"
+    environment:
+      - JVM_MINIMUM_MEMORY=1024m
+      - JVM_MAXIMUM_MEMORY=2048m
+    image: "atlassian/bamboo-server:6.8.1"
+  bamboo-agent-1:
+    volumes:
+      - "bambooAgentVolume-1:/home/bamboo/bamboo-agent-home"
+    container_name: bambooAgent-1
+    init: true
+    depends_on:
+      - bamboo-server
+    environment:
+      - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
+    image: "atlassian/bamboo-agent-base"
+    entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
+    # build:
+    #   context: .
+    #   args:
+    #     - "http://localhost:8085"
+  bamboo-agent-custom:
+    volumes:
+      - "bambooAgentVolume-custom:/home/bamboo/bamboo-agent-home"
+    container_name: bambooAgent-custom
+    init: true
+    depends_on:
+      - bamboo-server
+    environment:
+      - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
+    image: "bamboo-agent-custom4"
+    entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
+  # sonarqube:
+  #   volumes:
+  #     - "sonarConf:/opt/sonarqube/conf"
+  #     - "sonarData:/opt/sonarqube/data"
+  #     - "sonarLogs:/opt/sonarqube/logs"
+  #     - "sonarExtensions:/opt/sonarqube/extensions"
+  #   container_name: sonarqube
+  #   ports:
+  #     - "9000:9000"
+  #   environment:
+  #     - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+  #   image: "sonarqube:6.7.5"
+  # nexus3:
+  #   volumes:
+  #     - "nexusData:/nexus-data"
+  #   container_name: nexus
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - INSTALL4J_ADD_VM_PARAMS=-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m"
+  #   image: "sonatype/nexus3:3.19.1"
+volumes:
+  # jiraVolume:
+  # bitbucketVolume:
+  bambooVolume:
+  bambooAgentVolume-1:
+  bambooAgentVolume-custom:
+  # sonarConf:
+  # sonarData:
+  # sonarLogs:
+  # sonarExtensions:
+  # nexusData:
