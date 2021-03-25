@@ -1,7 +1,7 @@
 # Deploy a simple application on AKS from Bamboo custom agent
 - import images from docker hub registry to Azure ACR
 - deploy deployment.yaml on AKS
-- Azure votes app link: https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app
+- [Azure votes app link](https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app)
 
 # Deploy application
 
@@ -35,5 +35,5 @@ export acr_name="<ACR_NAME>.azurecr.io"
 
 After execution get the ip address informed and test the application
 
-![title](images/azure-votes.png)
+![alt text](images/azure-votes.png)
 ```
