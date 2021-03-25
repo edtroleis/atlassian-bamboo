@@ -50,7 +50,6 @@ if [ -f deployment.yaml ]; then
   echo
 
   logmsg 'Updating items on the cluster...'
-  kubectl apply -f deployment.yaml
   envsubst <deployment.yaml | kubectl apply -f -
 
   # Restart deployment with zero downtime
