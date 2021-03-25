@@ -1,5 +1,17 @@
 # atlassian-bamboo
 
+# Bamboo-agent-custom image
+
+## Softwares intalled on Bamboo agent
+- git
+- kubectl
+- az cli
+- envsubs
+
+## Create Bamboo agent custom image
+```
+docker build -t bamboo-agent-custom .
+```
 
 # Startup the stack
 ```

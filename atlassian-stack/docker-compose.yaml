@@ -43,10 +43,6 @@ services:
       - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
     image: "atlassian/bamboo-agent-base"
     entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
-    # build:
-    #   context: .
-    #   args:
-    #     - "http://localhost:8085"
   bamboo-agent-custom:
     volumes:
       - "bambooAgentVolume-custom:/home/bamboo/bamboo-agent-home"
@@ -56,7 +52,7 @@ services:
       - bamboo-server
     environment:
       - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
-    image: "bamboo-agent-custom4"
+    image: "bamboo-agent-custom"
     entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
   # sonarqube:
   #   volumes:
