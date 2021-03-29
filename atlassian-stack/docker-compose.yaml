@@ -1,4 +1,14 @@
 version: "3.3"
+networks:
+  bmb:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
 services:
   # jira-software:
   #   volumes:
@@ -32,6 +42,9 @@ services:
       - JVM_MINIMUM_MEMORY=1024m
       - JVM_MAXIMUM_MEMORY=2048m
     image: "atlassian/bamboo-server:6.8.1"
+    networks:
+      bmb:
+        ipv4_address: 172.16.238.12
   bamboo-agent-1:
     volumes:
       - "bambooAgentVolume-1:/home/bamboo/bamboo-agent-home"
@@ -43,6 +56,9 @@ services:
       - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
     image: "atlassian/bamboo-agent-base"
     entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
+    networks:
+      bmb:
+        ipv4_address: 172.16.238.13
   bamboo-agent-custom:
     volumes:
       - "bambooAgentVolume-custom:/home/bamboo/bamboo-agent-home"
@@ -52,8 +68,25 @@ services:
       - bamboo-server
     environment:
       - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
-    image: "bamboo-agent-custom"
+    image: "bamboo-agent-custom:1.0.0"
     entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
+    networks:
+      bmb:
+        ipv4_address: 172.16.238.14
+  bamboo-agent-dotnetcore:
+    volumes:
+      - "bambooAgentVolume-dotnetcore:/home/bamboo/bamboo-agent-home"
+    container_name: bambooAgent-dotnetcore
+    init: true
+    depends_on:
+      - bamboo-server
+    environment:
+      - SECURITY_TOKEN=ced9c48e72dfb2898354361892ade93729d512e6
+    image: "bamboo-agent-dotnetcore:1.0.0"
+    entrypoint: ["./runAgent.sh", "http://bamboo:8085"]
+    networks:
+      bmb:
+        ipv4_address: 172.16.238.15
   # sonarqube:
   #   volumes:
   #     - "sonarConf:/opt/sonarqube/conf"
@@ -81,6 +114,7 @@ volumes:
   bambooVolume:
   bambooAgentVolume-1:
   bambooAgentVolume-custom:
+  bambooAgentVolume-dotnetcore:
   # sonarConf:
   # sonarData:
   # sonarLogs:
