@@ -3,13 +3,20 @@ location      = "brazilsouth"
 resource_name = "<resource_name>"
 
 # Storage account properties
-storage_account_name     = "<name>tffiles"
+storage_account_name     = "<storage_account_name>"
 account_tier             = "Standard"
 account_replication_type = "LRS"
 access_tier              = "Hot"
 account_kind             = "StorageV2"
 allow_blob_public_access = "true"
-container_name           = "tfstate-files"
+file_share_name          = "bamboo-agents-volume"
+
+# Container group
+container_group_name         = ""
+cpu                          = "1"
+memory                       = "1.5"
+bamboo_server_security_token = ""
+volume_name                  = "bamboo-agents-volume"
 
 # Tags
 environment = "" # Subscription where the resource will be deployed
