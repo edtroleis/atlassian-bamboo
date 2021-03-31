@@ -40,6 +40,11 @@ variable "allow_blob_public_access" {
   type        = string
 }
 
+variable "container_name" {
+  description = "Storage account container name"
+  type        = string
+}
+
 # Tags
 variable "environment" {
   description = "Subscription where the resource will be deployed"

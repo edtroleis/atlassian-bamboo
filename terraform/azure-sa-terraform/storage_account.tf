@@ -14,5 +14,9 @@ resource "azurerm_storage_account" "storage-account" {
   #   virtual_network_subnet_ids = [azurerm_subnet.subnet.id]
   # }
 
+  lifecycle {
+    prevent_destroy = false
+  }
+
   tags = local.tags_any
 }

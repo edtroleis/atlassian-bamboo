@@ -9,6 +9,7 @@ account_replication_type = "LRS"
 access_tier              = "Hot"
 account_kind             = "StorageV2"
 allow_blob_public_access = "true"
+container_name           = "tfstate-files"
 
 # Tags
 environment = "" # Subscription where the resource will be deployed
