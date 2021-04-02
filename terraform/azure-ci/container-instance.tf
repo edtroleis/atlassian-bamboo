@@ -1,11 +1,11 @@
 resource "azurerm_container_group" "container-group" {
   name                = var.container_group_name
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.resource-group.location
+  resource_group_name = azurerm_resource_group.resource-group.name
   ip_address_type     = "public"
   dns_name_label      = "aci-label"
   os_type             = "Linux"
-
+  restart_policy = "Never" #Always, Never, OnFailure
   container {
     name   = "hello-world"
     image  = "microsoft/aci-helloworld:latest"
@@ -19,19 +19,19 @@ resource "azurerm_container_group" "container-group" {
   }
 
   container {
-    name     = "bamboo-agent"
-    image    = "atlassian/bamboo-agent-base:latest"
+    name     = var.container_name
+    image    = var.image_name
     cpu      = var.cpu
     memory   = var.memory
-    commands = ["./runAgent.sh", "http://bambooServerUrl:8085"]
+    commands = ["./runAgent.sh", var.bamboo_server_url]
     environment_variables = {
       SECURITY_TOKEN = var.bamboo_server_security_token
     }
 
-    ports {
-      port     = 443
-      protocol = "TCP"
-    }
+    # ports {
+    #   port     = 443
+    #   protocol = "TCP"
+    # }
     ports {
       port     = 54663
       protocol = "TCP"
@@ -55,6 +55,10 @@ resource "azurerm_container_group" "container-group" {
   #   username = "acrusername"
   #   password = "acrpassword"
   # }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 
   tags = local.tags_any
 }

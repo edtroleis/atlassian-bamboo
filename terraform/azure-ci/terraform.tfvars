@@ -12,11 +12,14 @@ allow_blob_public_access = "true"
 file_share_name          = "bamboo-agents-volume"
 
 # Container group
-container_group_name         = ""
+container_group_name         = "<container_group_name"
+container_name               = "<container_name>"
+image_name                   = "atlassian/bamboo-agent-base:latest"
 cpu                          = "1"
 memory                       = "1.5"
 bamboo_server_security_token = ""
 volume_name                  = "bamboo-agents-volume"
+bamboo_server_url            = "http://bambooServerUrl:8085"
 
 # Tags
 environment = "" # Subscription where the resource will be deployed

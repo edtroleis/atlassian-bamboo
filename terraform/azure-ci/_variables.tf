@@ -45,6 +45,47 @@ variable "file_share_name" {
   type        = string
 }
 
+# Container group
+variable "container_group_name" {
+  description = "Container group/instance name"
+  type        = string
+}
+
+variable "container_name" {
+  description = "Container name"
+  type        = string
+}
+
+variable "image_name" {
+  description = "Container image name"
+  type        = string
+}
+
+variable "cpu" {
+  description = "Container cpu"
+  type        = string
+}
+
+variable "memory" {
+  description = "Container memory"
+  type        = string
+}
+
+variable "bamboo_server_security_token" {
+  description = "Secret token to registry on Bamboo server"
+  type        = string
+}
+
+variable "volume_name" {
+  description = "Volume name used by bamboo agents"
+  type        = string
+}
+
+variable "bamboo_server_url" {
+  description = "Bamboo server url"
+  type        = string
+}
+
 # Tags
 variable "environment" {
   description = "Subscription where the resource will be deployed"
