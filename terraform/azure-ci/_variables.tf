@@ -86,6 +86,22 @@ variable "bamboo_server_url" {
   type        = string
 }
 
+# Log analytics
+variable "log_analytics_workspace_name" {
+  description = "log_analytics_workspace_name"
+  type        = string
+}
+
+variable "log_analytics_workspace_sku" {
+  description = "log_analytics_workspace_sku"
+  type        = string
+}
+
+variable "retention_in_days" {
+  description = "retention_in_days"
+  type        = number
+}
+
 # Tags
 variable "environment" {
   description = "Subscription where the resource will be deployed"

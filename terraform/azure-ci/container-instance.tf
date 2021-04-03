@@ -5,7 +5,14 @@ resource "azurerm_container_group" "container-group" {
   ip_address_type     = "public"
   dns_name_label      = "aci-label"
   os_type             = "Linux"
-  restart_policy = "Never" #Always, Never, OnFailure
+  restart_policy      = "Never" #Always, Never, OnFailure
+  diagnostics {
+    log_analytics {
+      log_type      = "ContainerInsights"
+      workspace_id  = azurerm_log_analytics_workspace.log-analytics-workspace.workspace_id
+      workspace_key = azurerm_log_analytics_workspace.log-analytics-workspace.primary_shared_key
+    }
+  }
   container {
     name   = "hello-world"
     image  = "microsoft/aci-helloworld:latest"
@@ -37,14 +44,14 @@ resource "azurerm_container_group" "container-group" {
       protocol = "TCP"
     }
 
-    volume {
-      name                 = var.volume_name
-      read_only            = false
-      mount_path           = "<mount_path>"
-      storage_account_name = data.azurerm_storage_account.storage-account.name
-      share_name           = var.file_share_name
-      storage_account_key  = data.azurerm_storage_account.storage-account.primary_access_key
-    }
+    #   volume {
+    #     name                 = var.volume_name
+    #     read_only            = false
+    #     mount_path           = "<mount_path>"
+    #     storage_account_name = data.azurerm_storage_account.storage-account.name
+    #     share_name           = var.file_share_name
+    #     storage_account_key  = data.azurerm_storage_account.storage-account.primary_access_key
+    #   }
   }
   identity {
     type = "SystemAssigned"
@@ -57,7 +64,7 @@ resource "azurerm_container_group" "container-group" {
   # }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = local.tags_any

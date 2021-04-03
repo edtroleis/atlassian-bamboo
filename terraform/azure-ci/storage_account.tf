@@ -9,7 +9,7 @@ resource "azurerm_storage_account" "storage-account" {
   allow_blob_public_access = var.allow_blob_public_access
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = local.tags_any
