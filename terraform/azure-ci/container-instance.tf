@@ -1,11 +1,17 @@
+data "azurerm_container_registry" "container-registry" {
+  name                = var.acr_name
+  resource_group_name = var.acr_resource_group_name
+}
+
 resource "azurerm_container_group" "container-group" {
-  name                = var.container_group_name
+  count               = var.bamboo_agent_number
+  name                = "${var.container_group_name}-${count.index}"
   location            = azurerm_resource_group.resource-group.location
   resource_group_name = azurerm_resource_group.resource-group.name
-  ip_address_type     = "public"
-  dns_name_label      = "aci-label"
-  os_type             = "Linux"
-  restart_policy      = "Never" #Always, Never, OnFailure
+  ip_address_type     = var.ip_address_type
+  dns_name_label      = var.dns_name_label
+  os_type             = var.os_type
+  restart_policy      = var.restart_policy
   diagnostics {
     log_analytics {
       log_type      = "ContainerInsights"
@@ -13,21 +19,23 @@ resource "azurerm_container_group" "container-group" {
       workspace_key = azurerm_log_analytics_workspace.log-analytics-workspace.primary_shared_key
     }
   }
+
+  image_registry_credential {
+    server   = data.azurerm_container_registry.container-registry.login_server
+    username = data.azurerm_container_registry.container-registry.admin_username
+    password = data.azurerm_container_registry.container-registry.admin_password
+  }
+
   container {
     name   = "hello-world"
     image  = "microsoft/aci-helloworld:latest"
     cpu    = "0.5"
     memory = "1.5"
-
-    ports {
-      port     = 443
-      protocol = "TCP"
-    }
   }
 
   container {
     name     = var.container_name
-    image    = var.image_name
+    image    = "${data.azurerm_container_registry.container-registry.login_server}/${var.image_name}"
     cpu      = var.cpu
     memory   = var.memory
     commands = ["./runAgent.sh", var.bamboo_server_url]
@@ -35,10 +43,10 @@ resource "azurerm_container_group" "container-group" {
       SECURITY_TOKEN = var.bamboo_server_security_token
     }
 
-    # ports {
-    #   port     = 443
-    #   protocol = "TCP"
-    # }
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
     ports {
       port     = 54663
       protocol = "TCP"
@@ -57,15 +65,35 @@ resource "azurerm_container_group" "container-group" {
     type = "SystemAssigned"
   }
 
-  # image_registry_credential {
-  #   server   = "servername.azurecr.io"
-  #   username = "acrusername"
-  #   password = "acrpassword"
-  # }
-
   lifecycle {
     prevent_destroy = false
   }
 
   tags = local.tags_any
 }
+
+
+
+
+
+# resource "azurerm_container_group" "hybrid-listener" {
+#   name                = "aci-listener"
+#   location            = local.location
+#   resource_group_name = azurerm_resource_group.t_relay.name
+#   ip_address_type     = "private"
+#   network_profile_id  = azurerm_network_profile.acr_profile.id
+#   os_type             = "Linux"
+
+#   image_registry_credential {
+#     server   = data.azurerm_container_registry.contoso.login_server
+#     username = data.azurerm_container_registry.contoso.admin_username
+#     password = data.azurerm_container_registry.contoso.admin_password
+#   }
+#                                                   1                                             2
+#   container {
+#     name   = "azbridge"
+#     image  = "${data.azurerm_container_registry.contoso.login_server}/azbridge:latest"
+#     cpu    = "0.5"
+#     memory = "1.5"
+#   }
+# }

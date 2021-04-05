@@ -10,5 +10,5 @@ output "file-share-name" {
 }
 
 output "container-group-fqdn" {
-  value = azurerm_container_group.container-group.fqdn
+  value = azurerm_container_group.container-group.*.fqdn
 }

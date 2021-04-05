@@ -11,10 +11,20 @@ account_kind             = "StorageV2"
 allow_blob_public_access = "true"
 file_share_name          = "bamboo-agents-volume"
 
+# ACR
+acr_name                = "edtroleisacrstack"
+acr_resource_group_name = "rg-acr"
+
 # Container group
-container_group_name         = "acibamboo"
+bamboo_agent_number  = 1
+container_group_name = "acibamboo"
+ip_address_type      = "public"
+dns_name_label       = "bambooagents"
+os_type              = "Linux"
+restart_policy       = "Never" #Always, Never, OnFailure
+
 container_name               = "bamboo-agent"
-image_name                   = "atlassian/bamboo-agent-base:latest"
+image_name                   = "bamboo-agent-base:latest" # "atlassian/bamboo-agent-base:latest"
 cpu                          = "1"
 memory                       = "1.5"
 bamboo_server_security_token = ""
@@ -22,9 +32,9 @@ volume_name                  = "bamboo-agents-volume"
 bamboo_server_url            = "http://bambooServerUrl:8085"
 
 # Log analytics
-log_analytics_workspace_name     = "logAnalyticsWorkspaceAci"
-log_analytics_workspace_sku      = "PerGB2018"
-retention_in_days = 30
+log_analytics_workspace_name = "logAnalyticsWorkspaceAci"
+log_analytics_workspace_sku  = "PerGB2018"
+retention_in_days            = 30
 
 # Tags
 environment = "" # Subscription where the resource will be deployed

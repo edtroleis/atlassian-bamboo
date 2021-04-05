@@ -45,7 +45,43 @@ variable "file_share_name" {
   type        = string
 }
 
+# ACR
+variable "acr_name" {
+  description = "ACR name"
+  type        = string
+}
+
+variable "acr_resource_group_name" {
+  description = "ACR resource group name"
+  type        = string
+}
+
+variable "ip_address_type" {
+  description = "ip_address_type"
+  type        = string
+}
+
+variable "dns_name_label" {
+  description = "dns_name_label"
+  type        = string
+}
+
+variable "os_type" {
+  description = ""
+  type        = string
+}
+
+variable "restart_policy" {
+  description = ""
+  type        = string
+}
+
 # Container group
+
+variable "bamboo_agent_number" {
+  description = "Number of container group/instance"
+  type        = string
+}
 variable "container_group_name" {
   description = "Container group/instance name"
   type        = string
