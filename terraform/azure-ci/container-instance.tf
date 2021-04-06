@@ -9,9 +9,10 @@ resource "azurerm_container_group" "container-group" {
   location            = azurerm_resource_group.resource-group.location
   resource_group_name = azurerm_resource_group.resource-group.name
   ip_address_type     = var.ip_address_type
-  dns_name_label      = var.dns_name_label
-  os_type             = var.os_type
-  restart_policy      = var.restart_policy
+  network_profile_id  = azurerm_network_profile.network-profile.id
+  # dns_name_label      = "${var.dns_name_label}-${count.index}"
+  os_type        = var.os_type
+  restart_policy = var.restart_policy
   diagnostics {
     log_analytics {
       log_type      = "ContainerInsights"
@@ -26,12 +27,12 @@ resource "azurerm_container_group" "container-group" {
     password = data.azurerm_container_registry.container-registry.admin_password
   }
 
-  container {
-    name   = "hello-world"
-    image  = "microsoft/aci-helloworld:latest"
-    cpu    = "0.5"
-    memory = "1.5"
-  }
+  # container {
+  #   name   = "hello-world"
+  #   image  = "microsoft/aci-helloworld:latest"
+  #   cpu    = "0.5"
+  #   memory = "1.5"
+  # }
 
   container {
     name     = var.container_name
@@ -52,18 +53,29 @@ resource "azurerm_container_group" "container-group" {
       protocol = "TCP"
     }
 
-    #   volume {
-    #     name                 = var.volume_name
-    #     read_only            = false
-    #     mount_path           = "<mount_path>"
-    #     storage_account_name = data.azurerm_storage_account.storage-account.name
-    #     share_name           = var.file_share_name
-    #     storage_account_key  = data.azurerm_storage_account.storage-account.primary_access_key
-    #   }
+      volume {
+        name                 = var.volume_name
+        read_only            = var.volume_read_only
+        mount_path           = var.volume_mount_path
+        storage_account_name = azurerm_storage_account.storage-account.name
+        share_name           = "${var.file_share_name}-${count.index}"
+        storage_account_key  = azurerm_storage_account.storage-account.primary_access_key
+      }
+
+    # volume {
+    #   name                 = "logs"
+    #   mount_path           = "/aci/logs"
+    #   read_only            = false
+    #   storage_account_name = azurerm_storage_account.storage-account.name
+    #   share_name           = "${var.file_share_name}-${count.index}"
+    #   storage_account_key  = azurerm_storage_account.storage-account.primary_access_key
+    # }
   }
-  identity {
-    type = "SystemAssigned"
-  }
+
+
+  # identity {
+  #   type = "SystemAssigned"
+  # }
 
   lifecycle {
     prevent_destroy = false

@@ -77,7 +77,6 @@ variable "restart_policy" {
 }
 
 # Container group
-
 variable "bamboo_agent_number" {
   description = "Number of container group/instance"
   type        = string
@@ -122,6 +121,16 @@ variable "bamboo_server_url" {
   type        = string
 }
 
+variable "volume_mount_path" {
+  description = "Container mount path"
+  type        = string
+}
+
+variable "volume_read_only" {
+  description = "Volume read only"
+  type        = string
+}
+
 # Log analytics
 variable "log_analytics_workspace_name" {
   description = "log_analytics_workspace_name"
@@ -136,6 +145,37 @@ variable "log_analytics_workspace_sku" {
 variable "retention_in_days" {
   description = "retention_in_days"
   type        = number
+}
+
+# Network
+variable "subnet_name" {
+  description = "subnet_name"
+  type        = string
+}
+
+variable "vnet_name" {
+  description = "vnet_name"
+  type        = string
+}
+
+variable "vnet_resource_group_name" {
+  description = "vnet_resource_group_name"
+  type        = string
+}
+
+variable "network_profile_name" {
+  description = "network_profile_name"
+  type        = string
+}
+
+variable "network_interface_name" {
+  description = "network_interface_name"
+  type        = string
+}
+
+variable "ip_configuration_name" {
+  description = "ip_configuration_name"
+  type        = string
 }
 
 # Tags

@@ -6,9 +6,13 @@ output "storage-account-name" {
 }
 
 output "file-share-name" {
-  value = azurerm_storage_share.storage-share.name
+  value = azurerm_storage_share.storage-share.*.name
 }
 
 output "container-group-fqdn" {
   value = azurerm_container_group.container-group.*.fqdn
+}
+
+output "container-group-ip-address" {
+  value = azurerm_container_group.container-group.*.ip_address
 }

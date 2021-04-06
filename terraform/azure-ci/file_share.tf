@@ -1,5 +1,6 @@
 resource "azurerm_storage_share" "storage-share" {
-  name                 = var.file_share_name
+  count                = var.bamboo_agent_number
+  name                 = "${var.file_share_name}-${count.index}"
   storage_account_name = azurerm_storage_account.storage-account.name
   quota                = 5
 
